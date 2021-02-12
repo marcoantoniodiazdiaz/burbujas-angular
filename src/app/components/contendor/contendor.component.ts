@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { InformacionService } from '../../services/informacion.service';
 
 @Component({
   selector: 'app-contendor',
@@ -8,30 +9,18 @@ import { Component, OnInit } from '@angular/core';
 export class ContendorComponent {
 
   lista = ['Marco', 'Daniel', 'Jose', 'Pedro'];
-  objectList = [
-    {
-      nombre: 'Marco Antonio',
-      edad: 20,
-      peso: 62,
-    },
-    {
-      nombre: 'Daniel Diaz',
-      edad: 55,
-      peso: 78,
-    },
-    {
-      nombre: 'Sergio Plasencia',
-      edad: 45,
-      peso: 68,
-    },
-  ];
+  objectList = [];
+  loading = true;
 
-  verTabla = false;
+  constructor(private informacionService: InformacionService) {
+    this.traerInformacion();
+  }
 
-  constructor() { }
-
-  cambiarVerTabla(): void {
-    this.verTabla = !this.verTabla;
+  traerInformacion(): void {
+    this.informacionService.getInformacion().then((resp) => {
+      this.objectList = resp.data;
+      this.loading = false;
+    });
   }
 
   agregarALista(nombre: string): void {
